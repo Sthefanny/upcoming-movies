@@ -10,6 +10,7 @@ class AppWidget extends StatelessWidget {
         primarySwatch: Colors.blue,
       ),
       home: HomeModule(),
+      debugShowCheckedModeBanner: false,
     );
   }
 }

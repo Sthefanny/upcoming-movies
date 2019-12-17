@@ -20,6 +20,7 @@ dependencies:
   dio: ^3.0.7
   rxdart: ^0.23.1
   bloc_pattern: ^2.5.1
+  connectivity: ^0.4.6+1
   flutter:
     sdk: flutter
 
