@@ -5,9 +5,11 @@ import 'package:upcoming_movies/app/app_widget.dart';
 
 import 'configs/urls_config.dart';
 import 'modules/loading/loading_bloc.dart';
+import 'repositories/request_repository.dart';
 
 export 'configs/urls_config.dart';
 export 'modules/loading/loading_bloc.dart';
+export 'repositories/request_repository.dart';
 
 class AppModule extends ModuleWidget {
   final urlsConfig = UrlsConfig();
@@ -20,6 +22,7 @@ class AppModule extends ModuleWidget {
 
   @override
   List<Dependency> get dependencies => [
+        Dependency((i) => RequestRepository(urlsConfig: to.getDependency())),
         Dependency((i) => urlsConfig),
       ];
 

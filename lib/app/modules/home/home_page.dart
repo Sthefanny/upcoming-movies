@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:upcoming_movies/app/app_module.dart';
 import 'package:upcoming_movies/app/common/models/movies_model.dart';
 import 'package:upcoming_movies/app/common/models/results_model.dart';
+import 'package:upcoming_movies/app/common/utils/page_routes.dart';
+import 'package:upcoming_movies/app/common/utils/snackbar_messages.dart';
 import 'package:upcoming_movies/app/modules/home/home_bloc.dart';
 import 'package:upcoming_movies/app/modules/home/home_module.dart';
 import 'package:upcoming_movies/app/modules/loading/loading_page.dart';
@@ -29,11 +31,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
     _loadingBloc.changeVisibility(false);
-    try {
-      _movieModel = _bloc.getUpcomingMovies();
-    } catch (e) {
-      print('Error: $e');
-    }
+    _movieModel = _bloc.getUpcomingMovies();
     _scrollController = ScrollController()..addListener(_scrollListener);
   }
 
@@ -89,7 +87,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: Stack(
         children: <Widget>[
-          buildList(),
+          Padding(padding: EdgeInsets.symmetric(horizontal: 5, vertical: 10), child: buildList()),
           LoadingPage(),
         ],
       ),
@@ -100,6 +98,11 @@ class _HomePageState extends State<HomePage> {
     return FutureBuilder(
       future: _movieModel,
       builder: (context, AsyncSnapshot<MoviesModel> snapshot) {
+        if (snapshot.hasError) {
+          SnackbarMessages.buildErrorMessage(context, snapshot.error);
+          return Container();
+        }
+
         if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
 
         _movies = snapshot.data.results;
@@ -133,28 +136,31 @@ class _HomePageState extends State<HomePage> {
     if (item.posterPath != null || item.backdropPath != null)
       image = item.posterPath != null ? Image.network('${_urls.imageUrl}${item.posterPath}') : Image.network('${_urls.imageUrl}${item.backdropPath}');
     var size = MediaQuery.of(context).size;
-    return Card(
-      elevation: 3,
-      child: Container(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        height: size.height * 0.2,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: <Widget>[
-            Container(width: size.width * 0.2, child: image),
-            Container(
-              width: size.width * 0.65,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  Expanded(child: Text(item.title, style: TextStyle(fontWeight: FontWeight.bold))),
-                  Expanded(child: Text(item.genreList.join(', '))),
-                  Container(child: Text('Release Date: ${item.releaseDate}')),
-                ],
+    return InkWell(
+      onTap: () => Navigator.of(context).pushNamed(PageRoutes.detailsRoute, arguments: {'movieId': item.id}),
+      child: Card(
+        elevation: 3,
+        child: Container(
+          padding: EdgeInsets.symmetric(vertical: 10),
+          height: size.height * 0.2,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: <Widget>[
+              Container(width: size.width * 0.2, child: image),
+              Container(
+                width: size.width * 0.65,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Expanded(child: Text(item.title, style: TextStyle(fontWeight: FontWeight.bold))),
+                    Expanded(child: Text(item.genreList.join(', '))),
+                    Container(child: Text('Release Date: ${item.releaseDate}')),
+                  ],
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

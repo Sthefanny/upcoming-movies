@@ -4,7 +4,6 @@ import 'package:bloc_pattern/bloc_pattern.dart';
 import 'package:flutter/material.dart';
 import 'package:upcoming_movies/app/modules/home/home_page.dart';
 import 'package:upcoming_movies/app/repositories/movies_repository.dart';
-import 'package:upcoming_movies/app/repositories/request_repository.dart';
 
 class HomeModule extends ModuleWidget {
   @override
@@ -14,8 +13,7 @@ class HomeModule extends ModuleWidget {
 
   @override
   List<Dependency> get dependencies => [
-        Dependency((i) => RequestRepository(urlsConfig: AppModule.to.getDependency())),
-        Dependency((i) => MoviesRepository(urlsConfig: AppModule.to.getDependency(), requestRepository: to.getDependency())),
+        Dependency((i) => MoviesRepository(urlsConfig: AppModule.to.getDependency(), requestRepository: AppModule.to.getDependency())),
       ];
 
   @override

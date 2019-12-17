@@ -16,11 +16,7 @@ class HomeBloc extends BlocBase {
 
   Stream<List<ResultModel>> get resultModel => _resultModelController.stream;
 
-  addResulModel(List<ResultModel> model) {
-    // var list = _resultModelController.value;
-    // list.addAll(model);
-    _resultModelController.sink.add(model);
-  }
+  Function(List<ResultModel>) get addResulModel => _resultModelController.sink.add;
 
   Future<List<GenreModel>> getAllGenres() async {
     String error;
