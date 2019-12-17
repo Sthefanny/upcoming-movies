@@ -53,6 +53,23 @@ class HomeBloc extends BlocBase {
     return movies;
   }
 
+  Future<List<ResultModel>> loadSuggestions(String search) async {
+    String error;
+    List<ResultModel> details;
+
+    try {
+      var response = await _repository.moviesSearch(search);
+      var genres = await getAllGenres();
+
+      details = MoviesModel.fromJson(response, genres).results;
+    } catch (e) {
+      error = e.message;
+    }
+    if (error != null && error != '') throw (error);
+
+    return details;
+  }
+
   @override
   void dispose() {
     _resultModelController.close();

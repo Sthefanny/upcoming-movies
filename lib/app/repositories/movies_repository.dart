@@ -36,6 +36,18 @@ class MoviesRepository extends Disposable {
     }
   }
 
+  Future<dynamic> moviesSearch(String query) async {
+    try {
+      var url = '${_urls.searchMovieUrl}&query=$query';
+      var response = await _repository.doGet(urlPart: url);
+      return response.data;
+    } on NoSuchMethodError catch (_) {
+      throw new Exception(MessagesEnumDescription[MessagesEnum.GENERAL_EXCEPTION]);
+    } catch (e) {
+      throw new Exception(e.message != null ? e.message : MessagesEnumDescription[MessagesEnum.GENERAL_EXCEPTION]);
+    }
+  }
+
   @override
   void dispose() {}
 }
