@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:upcoming_movies/app/modules/home/home_page.dart';
 import 'package:upcoming_movies/app/repositories/movies_repository.dart';
 
-export 'package:upcoming_movies/app/modules/search/search_bloc.dart';
 export 'package:upcoming_movies/app/repositories/movies_repository.dart';
 export 'package:upcoming_movies/app/modules/home/home_bloc.dart';
 

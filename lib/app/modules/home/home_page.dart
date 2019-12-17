@@ -20,7 +20,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final HomeBloc _bloc = HomeModule.to.getBloc();
-  final UrlsConfig _urls = AppModule.to.getDependency();
   final LoadingBloc _loadingBloc = AppModule.to.getBloc();
 
   Future<MoviesModel> _movieModel;
